@@ -1,0 +1,16 @@
+{
+  "name": "electronapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx electron-packager . SampleApp --platform=win32 --arch=x64 --overwrite --out=bin"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^3.0.11",
+    "electron-packager": "^13.0.1"
+  }
+}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Print Protype</title>
+<style>
+img{
+  max-width: 400px;
+  height: auto;  
+}
+</style>
+</head>
+
+<body>
+<h1>PDF出力プロトタイプ</h1>
+<img id="image" src="./image/sample_0.jpg"><br />
+<button id="change">画像を変える</button><br /><br>
+<button id="print-pdf">印刷する</button>
+<div id="pdf-path"></div>
+
+<script>
+    const ipc = require('electron').ipcRenderer
+
+    const printPDFBtn = document.getElementById('print-pdf')
+
+    const changeBtn   = document.getElementById('change')
+
+    const image = document.getElementById('image');
+
+    let number = 0;
+
+    // 画像変更
+    changeBtn.addEventListener('click', function(event) {
+      number++;
+      if(number > 3) number = 0;
+      image.src = './image/sample_' + number + '.jpg';
+    });
+
+    // [IPC] 印刷実行を送信する
+    printPDFBtn.addEventListener('click', function(event) {
+      // ボタンを非表示にする
+      printPDFBtn.style.display="none";
+      changeBtn.style.display="none";
+      document.getElementById('pdf-path').innerHTML = "";
+      // 送信
+      ipc.send('print-to-pdf')
+    })
+
+    // [IPC] 印刷完了を受信する
+    ipc.on('wrote-pdf', function(event, path) {
+      const message = `PDFを 書き出しました : ${path}`
+      document.getElementById('pdf-path').innerHTML = message
+      printPDFBtn.style.display="inline";
+      changeBtn.style.display="inline";
+    })
+
+</script>
+
+</body>
+</html>
